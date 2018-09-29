@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная страница</title>
+    <link th:href="@{webjars/bootstrap/3.2.0/css/bootstrap.min.css}"
+          rel="stylesheet">
+
+</head>
+<body>
+<th:block th:include="/menu"></th:block>
+<h1 style="margint-top:5%;margin-bottom:10%;text-align: center;">Добро пожаловать в LawyerCRM</h1>
+<p style="text-align: center;">Здесь будут публиковаться выигранные дела</p>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Активные Дела</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+
+    <link th:href="@{webjars/bootstrap/3.2.0/css/bootstrap.min.css}"
+          rel="stylesheet">
+
+
+    <script src="webjars/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<th:block th:include="/menu"></th:block>
+<div class="container" style="margin-top: 5%;margin-bottom: 10%">
+
+
+    <h1 style="margin-bottom:10%;text-align: center;">Активные дела</h1>
+    <div class="row">
+        <div class="col-md-4">
+            <a class="btn btn-default" th:href="@{/dc/add}">Добавление нового дела</a></div>
+        <div class="col-md-8">
+            <table class="table table-striped">
+                <tr>
+                    <th>Дата</th>
+                    <th>Имя Дела</th>
+                    <th>ФИО клиента</th>
+                    <th>Опции</th>
+                </tr>
+                <!--<tr th:each="product : ${products}">-->
+                <!--<td th:text="${product.id}"></td>-->
+                <!--<td th:text="${product.name}"></td>-->
+                <!--<td th:text="${product.quantity}"></td>-->
+                <!--<td th:text="${product.price}"></td>-->
+                <!--<td><a class="btn btn-warning" th:href="@{'dc/edit/' + ${product.id}}">edit</a>-->
+                <!--<a class="btn btn-danger" th:href="@{'dc/delete/' + ${product.id}}">delete</a>-->
+                <!--</td>-->
+
+                <!--</tr>-->
+            </table>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
