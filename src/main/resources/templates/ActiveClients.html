@@ -18,31 +18,34 @@
 
     <h1 style="margin-bottom:10%;text-align: center;">Активные дела</h1>
     <div class="row">
-        <div class="col-md-4">
-            <a class="btn btn-default" th:href="@{/dc/add}">Добавление нового дела</a></div>
-        <div class="col-md-8">
+        <div class="col-md-2">
+            <a class="btn btn-default" th:href="@{/add}">Добавление дела</a>
+        </div>
+
+        <div class="col-md-10">
             <table class="table table-striped">
                 <tr>
+                    <th>ID</th>
                     <th>Дата</th>
                     <th>Имя Дела</th>
                     <th>ФИО клиента</th>
                     <th>Опции</th>
                 </tr>
-                <!--<tr th:each="product : ${products}">-->
-                <!--<td th:text="${product.id}"></td>-->
-                <!--<td th:text="${product.name}"></td>-->
-                <!--<td th:text="${product.quantity}"></td>-->
-                <!--<td th:text="${product.price}"></td>-->
-                <!--<td><a class="btn btn-warning" th:href="@{'dc/edit/' + ${product.id}}">edit</a>-->
-                <!--<a class="btn btn-danger" th:href="@{'dc/delete/' + ${product.id}}">delete</a>-->
-                <!--</td>-->
+                <tr th:each="indexTable : ${indexTables}">
+                    <td th:text="${indexTable.id}"></td>
+                    <td th:text="${#dates.format(indexTable.date, 'dd-MMM-yyyy')}"></td>
+                    <td th:text="${indexTable.name}"></td>
+                    <td th:text="${indexTable.fio}"></td>
+                    <td><a class="btn btn-warning" th:href="@{'/edit/' + ${indexTable.id}}">Просмотр/Редактирование</a>
+                        <a class="btn btn-danger" th:href="@{'/archive/' + ${indexTable.id}}">В архив</a>
+                    </td>
 
-                <!--</tr>-->
+                </tr>
             </table>
         </div>
     </div>
-
 </div>
+
 
 </body>
 </html>

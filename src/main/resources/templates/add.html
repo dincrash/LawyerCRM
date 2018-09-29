@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление нового дела</title>
+    <link th:href="@{webjars/bootstrap/3.2.0/css/bootstrap.min.css}"
+          rel="stylesheet">
+
+</head>
+<body>
+<th:block th:include="/menu"></th:block>
+<div class="container">
+    <h3>Добавление нового дела</h3>
+
+    <form action="#" th:action="@{/add}" th:object="${indexTable}" method="post">
+
+
+        <table class="table table-striped">
+
+            <tr>
+
+                <td>Дата</td>
+                <td><input type="date" th:field="*{date}"/></td>
+            </tr>
+            <tr>
+
+                <td>Имя Дела</td>
+                <td><input type="text" th:field="*{name}"/></td>
+            </tr>
+            <tr>
+
+                <td>ФИО</td>
+                <td><input type="text" th:field="*{fio}"/></td>
+            </tr>
+            <tr>
+
+                <td>&nbsp;</td>
+                <td><input type="submit" class="btn btn-success" value="Добавить" /></td>
+            </tr>
+        </table>
+
+
+
+    </form>
+</div>
+</body>
+</html>

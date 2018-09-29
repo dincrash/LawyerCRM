@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Просмотр дела</title>
+    <link th:href="@{/../webjars/bootstrap/3.2.0/css/bootstrap.min.css}"
+          rel="stylesheet">
+
+</head>
+<body>
+<th:block th:include="/menu"></th:block>
+<div class="container">
+<form action="#" th:action="@{/edit}" th:object="${indexTable}" method="post">
+        <h3 style="text-align: center">Просмотр дела</h3>
+        <table class="table table-striped">
+            <tr>
+                <th>ID</th><td th:text="*{id}"></td>
+                <th>Дата</th><td th:text="*{#dates.format(date, 'dd-MMM-yyyy')}"></td>
+                <th>Имя Дела</th><td th:text="*{name}"></td>
+                <th>ФИО клиента</th><td th:text="*{fio}"></td>
+            </tr>
+        </table>
+        <p>Прикрепленные файлы</p>
+        <h3 style="margin-top:10%;text-align: center">Редактирование дела</h3>
+
+
+
+        <table class="table table-striped" >
+
+            <tr>
+
+                <td>Дата</td>
+                <td><input type="date" th:field="*{date}"/></td>
+            </tr>
+            <tr>
+
+                <td>Имя Дела</td>
+                <td><input type="text" th:field="*{name}"/></td>
+            </tr>
+            <tr>
+
+                <td>ФИО</td>
+                <td><input type="text" th:field="*{fio}"/></td>
+            </tr>
+            <tr>
+
+                <td>&nbsp;</td>
+                <td><input type="submit" class="btn btn-success" value="Редактировать" /></td>
+                <input type="hidden" th:field="*{id}" />
+            </tr>
+        </table>
+
+
+
+    </form>
+</div>
+</body>
+</html>
