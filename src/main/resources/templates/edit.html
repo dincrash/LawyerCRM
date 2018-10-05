@@ -10,22 +10,35 @@
 <body>
 <th:block th:include="/menu"></th:block>
 <div class="container">
-<form action="#" th:action="@{/edit}" th:object="${indexTable}" method="post">
+
+    <p>Прикрепленные файлы</p>
+
+
+
+
+
+    <form action="#" th:action="@{/edit/save}" th:object="${indexTable}" method="post">
         <h3 style="text-align: center">Просмотр дела</h3>
         <table class="table table-striped">
             <tr>
-                <th>ID</th><td th:text="*{id}"></td>
-                <th>Дата</th><td th:text="*{#dates.format(date, 'dd-MMM-yyyy')}"></td>
-                <th>Имя Дела</th><td th:text="*{name}"></td>
-                <th>ФИО клиента</th><td th:text="*{fio}"></td>
+                <th>ID</th>
+                <td th:text="*{id}"></td>
+                <th>Дата</th>
+                <td th:text="*{#dates.format(date, 'dd-MMM-yyyy')}"></td>
+                <th>Имя Дела</th>
+                <td th:text="*{name}"></td>
+                <th>ФИО клиента</th>
+                <td th:text="*{fio}"></td>
             </tr>
         </table>
-        <p>Прикрепленные файлы</p>
+
+
+
+
         <h3 style="margin-top:10%;text-align: center">Редактирование дела</h3>
 
 
-
-        <table class="table table-striped" >
+        <table class="table table-striped">
 
             <tr>
 
@@ -45,11 +58,10 @@
             <tr>
 
                 <td>&nbsp;</td>
-                <td><input type="submit" class="btn btn-success" value="Редактировать" /></td>
-                <input type="hidden" th:field="*{id}" />
+                <td><input type="submit" class="btn btn-success" value="save"/></td>
+                <input type="hidden" th:field="*{id}"/>
             </tr>
         </table>
-
 
 
     </form>

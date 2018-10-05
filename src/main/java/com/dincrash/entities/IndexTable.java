@@ -4,20 +4,26 @@ package com.dincrash.entities;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.util.*;
 
 @Entity
 @Table(name = "indextable")
 public class IndexTable {
     private int id;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Temporal(TemporalType.DATE)
     private Date date;
-
     private String name;
     private String fio;
+    private Set<DeloDocument> deloDocument=new HashSet<DeloDocument>();
 
+    @OneToMany(mappedBy = "indexTable", cascade = CascadeType.ALL)
+    public Set<DeloDocument> getDeloDocument() {
+        return deloDocument;
+    }
+
+    public void setDeloDocument(Set<DeloDocument> deloDocument) {
+        this.deloDocument = deloDocument;
+    }
 
     @Id
     @Column(name = "id", nullable = false)
@@ -30,6 +36,8 @@ public class IndexTable {
     }
     @Basic
     @Column(name = "date", nullable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
     public Date getDate() {
         return date;
     }
@@ -54,7 +62,12 @@ public class IndexTable {
         return fio;
     }
 
+
+
+
     public void setFio(String fio) {
         this.fio = fio;
     }
+
+
 }

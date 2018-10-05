@@ -1,25 +1,24 @@
 package com.dincrash.controller;
 
 
+import com.dincrash.Config.FileBucket;
+import com.dincrash.Config.FileValidator;
+import com.dincrash.entities.DeloDocument;
 import com.dincrash.entities.IndexTable;
-import com.dincrash.form.MyUploadForm;
+import com.dincrash.service.DocumentService;
 import com.dincrash.service.IndexTableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.List;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import java.io.IOException;
 
 @Controller
 public class MainController {
@@ -27,15 +26,26 @@ public class MainController {
     @Autowired
     private IndexTableService indexTableService;
 
-    @RequestMapping(value = { "/" }, method = RequestMethod.GET)
-    public String Index(){
+    @Autowired
+    private DocumentService documentService;
+
+    @Autowired
+    FileValidator fileValidator;
+
+    @InitBinder("fileBucket")
+    protected void initBinder(WebDataBinder binder) {
+        binder.setValidator(fileValidator);
+    }
+
+    @RequestMapping(value = {"/"}, method = RequestMethod.GET)
+    public String Index() {
 
         return "index";
 
     }
 
-    @RequestMapping(value = { "/ActiveClients" }, method = RequestMethod.GET)
-    public String ActiveClients(ModelMap modelMap){
+    @RequestMapping(value = {"/ActiveClients"}, method = RequestMethod.GET)
+    public String ActiveClients(ModelMap modelMap) {
 
         modelMap.put("indexTables", indexTableService.listTable());
 
@@ -44,9 +54,8 @@ public class MainController {
     }
 
 
-
-    @RequestMapping(value = { "/ArchiveClients" }, method = RequestMethod.GET)
-    public String ArchiveClients(){
+    @RequestMapping(value = {"/ArchiveClients"}, method = RequestMethod.GET)
+    public String ArchiveClients() {
 
         return "ArchiveClients";
 
@@ -68,19 +77,16 @@ public class MainController {
     }
 
 
-
     @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
-    public String edit(@PathVariable("id") int id, ModelMap modelMap,Model model) {
+    public String edit(@PathVariable("id") int id, ModelMap modelMap) {
         modelMap.put("indexTable", indexTableService.find(id));
 
-        MyUploadForm myUploadForm = new MyUploadForm();
-        model.addAttribute("myUploadForm", myUploadForm);
 
         return "edit";
     }
 
 
-    @RequestMapping(value = "edit", method = RequestMethod.POST)
+    @RequestMapping(value = "edit/save", method = RequestMethod.POST)
     public String edit(@ModelAttribute("indexTable") IndexTable indexTable) {
         indexTableService.update(indexTable);
 
@@ -88,55 +94,75 @@ public class MainController {
     }
 
 
+    @RequestMapping(value = { "/add-document-{userId}" }, method = RequestMethod.GET)
+    public String addDocuments(@PathVariable int userId, ModelMap model) {
+        IndexTable user = indexTableService.find(userId);
+        model.addAttribute("user", user);
 
-    private String doUpload(HttpServletRequest request, Model model, //
-                            MyUploadForm myUploadForm) {
+        FileBucket fileModel = new FileBucket();
+        model.addAttribute("fileBucket", fileModel);
 
-        String description = myUploadForm.getDescription();
-        System.out.println("Description: " + description);
 
-        // Root Directory.
-        String uploadRootPath = request.getServletContext().getRealPath("upload");
-        System.out.println("uploadRootPath=" + uploadRootPath);
+        model.addAttribute("documents", documentService.findAllbyId(userId));
 
-        File uploadRootDir = new File(uploadRootPath);
-        // Create directory if it not exists.
-        if (!uploadRootDir.exists()) {
-            uploadRootDir.mkdirs();
-        }
-        MultipartFile[] fileDatas = myUploadForm.getFileDatas();
-        //
-        List<File> uploadedFiles = new ArrayList<File>();
-        List<String> failedFiles = new ArrayList<String>();
-
-        for (MultipartFile fileData : fileDatas) {
-
-            // Client File Name
-            String name = fileData.getOriginalFilename();
-            System.out.println("Client File Name = " + name);
-
-            if (name != null && name.length() > 0) {
-                try {
-                    // Create the file at server
-                    File serverFile = new File(uploadRootDir.getAbsolutePath() + File.separator + name);
-
-                    BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile));
-                    stream.write(fileData.getBytes());
-                    stream.close();
-                    //
-                    uploadedFiles.add(serverFile);
-                    System.out.println("Write file: " + serverFile);
-                } catch (Exception e) {
-                    System.out.println("Error Write file: " + name);
-                    failedFiles.add(name);
-                }
-            }
-        }
-        model.addAttribute("description", description);
-        model.addAttribute("uploadedFiles", uploadedFiles);
-        model.addAttribute("failedFiles", failedFiles);
-        return "uploadResult";
+        return "managedocuments";
     }
 
+
+    @RequestMapping(value = { "/download-document/{userId}/{docId}" }, method = RequestMethod.GET)
+    public String downloadDocument(@PathVariable int userId, @PathVariable int docId, HttpServletResponse response) throws IOException {
+        DeloDocument document = documentService.find(docId);
+
+        response.setContentType(document.getType());
+        response.setContentLength(document.getContent().length);
+        response.setHeader("Content-Disposition","attachment; filename=\"" + document.getName() +"\"");
+
+        FileCopyUtils.copy(document.getContent(), response.getOutputStream());
+
+        return "redirect:/add-document-"+userId;
+    }
+
+    @RequestMapping(value = { "/delete-document/{userId}/{docId}" }, method = RequestMethod.GET)
+    public String deleteDocument(@PathVariable int userId, @PathVariable int docId) {
+        documentService.delete(docId);
+        return "redirect:/add-document-"+userId;
+    }
+
+    @RequestMapping(value = { "/add-document-{userId}" }, method = RequestMethod.POST)
+    public String uploadDocument(@Valid FileBucket fileBucket, BindingResult result, ModelMap model, @PathVariable int userId) throws IOException{
+
+        if (result.hasErrors()) {
+            System.out.println("validation errors");
+            IndexTable user = indexTableService.find(userId);
+            model.addAttribute("user", user);
+            model.addAttribute("documents", documentService.listTable());
+
+            return "managedocuments";
+        } else {
+
+            System.out.println("Fetching file");
+
+            IndexTable user = indexTableService.find(userId);
+            model.addAttribute("user", user);
+
+            saveDocument(fileBucket, user);
+
+            return "redirect:/add-document-"+userId;
+        }
+    }
+//
+    private void saveDocument(FileBucket fileBucket, IndexTable indexTable) throws IOException {
+
+        DeloDocument document = new DeloDocument();
+
+        MultipartFile multipartFile = fileBucket.getFile();
+
+        document.setName(multipartFile.getOriginalFilename());
+        document.setDescription(fileBucket.getDescription());
+        document.setType(multipartFile.getContentType());
+        document.setContent(multipartFile.getBytes());
+        document.setIndexTable(indexTable);
+        documentService.create(document);
+    }
 
 }

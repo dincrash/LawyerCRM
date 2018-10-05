@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление нового дела</title>
+    <link th:href="@{webjars/bootstrap/3.2.0/css/bootstrap.min.css}"
+          rel="stylesheet">
+
+</head>
+<body>
+<th:block th:include="/menu"></th:block>
+<div class="container" style="margin-top: 5%;margin-bottom: 10%">
+    <div>
+        <table class="table table-striped">
+            <tr>
+                <th>Имя</th>
+                <th>Описание</th>
+                <th>Тип файла</th>
+                <th>Загрузка</th>
+                <th></th>
+
+            </tr>
+            <tr th:each="docum : ${documents}">
+                <td th:text="${docum.name}"></td>
+                <td th:text="${docum.description}"></td>
+                <td th:text="${docum.type}"></td>
+                <td><a class="btn btn-warning"
+                       th:href="@{'/download-document/'+${user.id}+'/'+${docum.id}}">загрузка</a></td>
+                <td><a class="btn btn-warning" th:href="@{'/delete-document/'+${user.id}+'/'+${docum.id}}">удаление</a>
+                </td>
+
+            </tr>
+        </table>
+    </div>
+
+    <div class="panel panel-default">
+
+        <div class="panel-heading"><span class="lead">Upload New Document</span></div>
+        <div class="uploadcontainer">
+            <form method="POST" th:object="${fileBucket}" action="" enctype="multipart/form-data">
+
+                <div >
+                    <p>Файл на загрузку</p>
+                    <input th:field="*{file}" type="file"/>
+                </div>
+                <div >
+                    <p>Описание</p>
+                    <input th:field="*{description}" style="width:300px;"/>
+                    <input type="submit" value="Upload">
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
