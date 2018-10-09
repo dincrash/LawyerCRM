@@ -10,7 +10,9 @@ import java.util.*;
 @Table(name = "indextable")
 public class IndexTable {
     private int id;
-
+    private Date datecourt;
+    private boolean status;
+    private String comment;
     private Date date;
     private String name;
     private String fio;
@@ -62,12 +64,40 @@ public class IndexTable {
         return fio;
     }
 
-
-
-
     public void setFio(String fio) {
         this.fio = fio;
     }
 
 
+    @Basic
+    @Column(name = "datecourt")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    public Date getDatecourt() {
+        return datecourt;
+    }
+
+    public void setDatecourt(Date datecourt) {
+        this.datecourt = datecourt;
+    }
+
+    @Basic
+    @Column(name = "status")
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    @Basic
+    @Column(name = "comment")
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 }

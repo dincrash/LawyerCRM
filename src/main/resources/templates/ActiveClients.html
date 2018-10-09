@@ -38,7 +38,6 @@
                     <td th:text="${indexTable.fio}"></td>
                     <td><a class="btn btn-warning" th:href="@{'/edit/' + ${indexTable.id}}">Просмотр/Редактирование</a>
                         <a class="btn btn-danger" th:href="@{'/archive/' + ${indexTable.id}}">В архив</a>
-                        <a class="btn btn-warning" th:href="@{'/add-document-'+${indexTable.id}}">добавление файла</a>
                     </td>
 
                 </tr>

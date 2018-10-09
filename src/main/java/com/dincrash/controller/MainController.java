@@ -78,10 +78,17 @@ public class MainController {
 
 
     @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
-    public String edit(@PathVariable("id") int id, ModelMap modelMap) {
+    public String edit(@PathVariable("id") int id, ModelMap modelMap, ModelMap model) {
         modelMap.put("indexTable", indexTableService.find(id));
 
+        IndexTable user = indexTableService.find(id);
+        model.addAttribute("user", user);
 
+        FileBucket fileModel = new FileBucket();
+        model.addAttribute("fileBucket", fileModel);
+
+
+        model.addAttribute("documents", documentService.findAllbyId(id));
         return "edit";
     }
 
@@ -94,23 +101,11 @@ public class MainController {
     }
 
 
-    @RequestMapping(value = { "/add-document-{userId}" }, method = RequestMethod.GET)
-    public String addDocuments(@PathVariable int userId, ModelMap model) {
-        IndexTable user = indexTableService.find(userId);
-        model.addAttribute("user", user);
 
-        FileBucket fileModel = new FileBucket();
-        model.addAttribute("fileBucket", fileModel);
-
-
-        model.addAttribute("documents", documentService.findAllbyId(userId));
-
-        return "managedocuments";
-    }
 
 
     @RequestMapping(value = { "/download-document/{userId}/{docId}" }, method = RequestMethod.GET)
-    public String downloadDocument(@PathVariable int userId, @PathVariable int docId, HttpServletResponse response) throws IOException {
+    public String downloadDocument(@PathVariable int userId, @PathVariable int docId,  HttpServletResponse response) throws IOException {
         DeloDocument document = documentService.find(docId);
 
         response.setContentType(document.getType());
@@ -119,18 +114,17 @@ public class MainController {
 
         FileCopyUtils.copy(document.getContent(), response.getOutputStream());
 
-        return "redirect:/add-document-"+userId;
+        return "redirect:/edit/"+userId;
     }
 
     @RequestMapping(value = { "/delete-document/{userId}/{docId}" }, method = RequestMethod.GET)
     public String deleteDocument(@PathVariable int userId, @PathVariable int docId) {
         documentService.delete(docId);
-        return "redirect:/add-document-"+userId;
+        return "redirect:/edit/"+userId;
     }
 
-    @RequestMapping(value = { "/add-document-{userId}" }, method = RequestMethod.POST)
+    @RequestMapping(value = { "/edit/{userId}" }, method = RequestMethod.POST)
     public String uploadDocument(@Valid FileBucket fileBucket, BindingResult result, ModelMap model, @PathVariable int userId) throws IOException{
-
         if (result.hasErrors()) {
             System.out.println("validation errors");
             IndexTable user = indexTableService.find(userId);
@@ -147,7 +141,7 @@ public class MainController {
 
             saveDocument(fileBucket, user);
 
-            return "redirect:/add-document-"+userId;
+            return "redirect:/edit/"+userId;
         }
     }
 //
