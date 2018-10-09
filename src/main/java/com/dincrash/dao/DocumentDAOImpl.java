@@ -155,8 +155,6 @@ public class DocumentDAOImpl implements DocumentDAO {
 
 
 
-            System.out.println(deloDocument.get(docid));
-            System.out.println(deloDocument);
 
             transaction.commit();
         } catch (Exception e) {

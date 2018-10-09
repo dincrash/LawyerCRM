@@ -16,28 +16,29 @@
 
 
     <h1 style="margin-bottom:10%;text-align: center;">Архивные дела</h1>
-
-    <table class="table table-striped">
-        <tr>
-            <th>ID</th>
-            <th>Дата</th>
-            <th>Имя Дела</th>
-            <th>ФИО клиента</th>
-            <th>Опции</th>
-        </tr>
-        <!--<tr th:each="product : ${products}">-->
-        <!--<td th:text="${product.id}"></td>-->
-        <!--<td th:text="${product.name}"></td>-->
-        <!--<td th:text="${product.quantity}"></td>-->
-        <!--<td th:text="${product.price}"></td>-->
-        <!--<td><a class="btn btn-warning" th:href="@{'dc/edit/' + ${product.id}}">edit</a>-->
-        <!--<a class="btn btn-danger" th:href="@{'dc/delete/' + ${product.id}}">delete</a>-->
-        <!--</td>-->
-
-        <!--</tr>-->
-    </table>
+    <div class="panel panel-default">
+        <table class="table table-striped">
+            <tr>
+                <th>ID</th>
+                <th>Дата</th>
+                <th>Имя Дела</th>
+                <th>ФИО клиента</th>
+                <th>Опции</th>
+            </tr>
+            <tr th:each="list : ${listarchives}">
+                <td th:text="${list.id}"></td>
+                <td th:text="${list.#dates.format(list.date, 'dd-MMM-yyyy')}"></td>
+                <td th:text="${list.name}"></td>
+                <td th:text="${list.fio}"></td>
+                <td><a class="btn btn-warning" th:href="@{'/edit/' + ${list.id}}">Просмотр/Редактирование</a>
+                    <a class="btn btn-danger" th:href="@{'/active/' + ${list.id}}">В активные дела</a>
+                </td>
 
 
+            </tr>
+        </table>
+
+    </div>
 </div>
 
 </body>

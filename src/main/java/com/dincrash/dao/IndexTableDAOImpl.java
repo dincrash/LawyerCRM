@@ -5,6 +5,7 @@ import com.dincrash.entities.IndexTable;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -24,11 +25,19 @@ public class IndexTableDAOImpl implements IndexTableDAO {
         List<IndexTable> indexTables = null;
         Session session = null;
         Transaction transaction = null;
+        int status = 1;
 
         try {
             session = sessionFactory.openSession();
             transaction = session.beginTransaction();
-            indexTables = session.createQuery("from IndexTable").list();
+            String hql = "from IndexTable where status like concat('%',:dq,'%')";
+            Query q1 = session.createQuery(hql);
+
+
+            q1.setParameter("dq",status);
+            indexTables = q1.list();
+
+
 
             transaction.commit();
         } catch (Exception e) {
@@ -131,4 +140,43 @@ public class IndexTableDAOImpl implements IndexTableDAO {
             session.close();
         }
     }
+
+
+
+    @Override
+    public List<IndexTable> listArchive() {
+        List<IndexTable> listArchive = null;
+        Session session = null;
+        Transaction transaction = null;
+        int status = 0;
+
+        try {
+
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            String hql = "from IndexTable where status like concat('%',:dq,'%')";
+            Query q1 = session.createQuery(hql);
+
+
+            q1.setParameter("dq",status);
+            listArchive = q1.list();
+
+
+
+
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+
+                transaction.rollback();
+
+            }
+        } finally {
+            session.close();
+        }
+        return listArchive;
+    }
+
+
 }

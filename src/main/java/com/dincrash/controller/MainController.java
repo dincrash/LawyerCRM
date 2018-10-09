@@ -55,7 +55,10 @@ public class MainController {
 
 
     @RequestMapping(value = {"/ArchiveClients"}, method = RequestMethod.GET)
-    public String ArchiveClients() {
+    public String ArchiveClients(ModelMap modelMap) {
+
+        modelMap.put("listarchives", indexTableService.listArchive());
+
 
         return "ArchiveClients";
 
@@ -108,7 +111,6 @@ public class MainController {
     public String downloadDocument(@PathVariable int userId, @PathVariable int docId,  HttpServletResponse response) throws IOException {
         DeloDocument document = documentService.find(docId);
 
-        response.setContentType(document.getType());
         response.setContentLength(document.getContent().length);
         response.setHeader("Content-Disposition","attachment; filename=\"" + document.getName() +"\"");
 
@@ -122,16 +124,33 @@ public class MainController {
         documentService.delete(docId);
         return "redirect:/edit/"+userId;
     }
+    @RequestMapping(value = {"/archive/{id}" }, method =RequestMethod.GET)
+    public String toArchive(@PathVariable int id,@ModelAttribute("indexTable") IndexTable indexTable){
+        IndexTable qd = indexTableService.find(id);
+        boolean sq = false;
+        qd.setStatus(sq);
+        indexTableService.update(qd);
+        return "redirect:/ActiveClients";
+    }
+
+    @RequestMapping(value = {"/active/{id}" }, method =RequestMethod.GET)
+    public String toActive(@PathVariable int id,@ModelAttribute("indexTable") IndexTable indexTable){
+        IndexTable qd = indexTableService.find(id);
+        boolean sq = true;
+        qd.setStatus(sq);
+        indexTableService.update(qd);
+        return "redirect:/ActiveClients";
+    }
 
     @RequestMapping(value = { "/edit/{userId}" }, method = RequestMethod.POST)
-    public String uploadDocument(@Valid FileBucket fileBucket, BindingResult result, ModelMap model, @PathVariable int userId) throws IOException{
+    public String edit(@Valid FileBucket fileBucket, BindingResult result, ModelMap model, @PathVariable int userId) throws IOException{
         if (result.hasErrors()) {
             System.out.println("validation errors");
             IndexTable user = indexTableService.find(userId);
             model.addAttribute("user", user);
             model.addAttribute("documents", documentService.listTable());
 
-            return "managedocuments";
+            return "redirect:/edit/"+userId;
         } else {
 
             System.out.println("Fetching file");
@@ -152,8 +171,6 @@ public class MainController {
         MultipartFile multipartFile = fileBucket.getFile();
 
         document.setName(multipartFile.getOriginalFilename());
-        document.setDescription(fileBucket.getDescription());
-        document.setType(multipartFile.getContentType());
         document.setContent(multipartFile.getBytes());
         document.setIndexTable(indexTable);
         documentService.create(document);

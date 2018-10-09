@@ -3,118 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <title>Просмотр дела</title>
-    <link th:href="@{/../webjars/bootstrap/3.2.0/css/bootstrap.min.css}"
+
+    <script th:src="@{/webjars/jquery/3.2.1/jquery.min.js}" type="text/javascript"></script>
+    <link th:href="@{/webjars/bootstrap/3.2.0/css/bootstrap.min.css}"
           rel="stylesheet">
+    <link th:href="@{/webjars/bootstrap-toggle/2.2.0/css/bootstrap-toggle.css}"
+          rel="stylesheet">
+    <script th:src="@{/webjars/bootstrap-toggle/2.2.0/js/bootstrap-toggle.js}" type="text/javascript"></script>
 
 </head>
 <body>
 <th:block th:include="/menu"></th:block>
+
 <div class="container">
-    <div>
-        <p>Прикрепленные файлы</p>
-        <div>
-            <table class="table table-striped">
-                <tr>
-                    <th>Имя</th>
-                    <th>Описание</th>
-                    <th>Тип файла</th>
-                    <th>Загрузка</th>
-                    <th></th>
+    <div class="row">
+        <div class="col-sm-8">
 
-                </tr>
-                <tr th:each="docum : ${documents}">
-                    <td th:text="${docum.name}"></td>
-                    <td th:text="${docum.description}"></td>
-                    <td th:text="${docum.type}"></td>
-                    <td><a class="btn btn-warning"
-                           th:href="@{'/download-document/'+${user.id}+'/'+${docum.id}}">загрузка</a></td>
-                    <td><a class="btn btn-warning"
-                           th:href="@{'/delete-document/'+${user.id}+'/'+${docum.id}}">удаление</a>
-                    </td>
+            <div class="panel panel-default">
+                <div class="panel-heading" style="text-align: center"><span class="lead">Прикрепленные файлы</span>
+                </div>
 
-                </tr>
-            </table>
+                <table class="table table-striped">
+                    <tr>
+                        <th>Имя</th>
+                        <th>Опции</th>
+                        <th></th>
+
+                    </tr>
+                    <tr th:each="docum : ${documents}">
+                        <td th:text="${docum.name}"></td>
+                        <td><a class="btn btn-warning"
+                               th:href="@{'/download-document/'+${user.id}+'/'+${docum.id}}">загрузка</a></td>
+                        <td><a class="btn btn-danger"
+                               th:href="@{'/delete-document/'+${user.id}+'/'+${docum.id}}">удаление</a>
+                        </td>
+
+                    </tr>
+                </table>
+            </div>
         </div>
+        <div class="col-sm-4">
 
-        <div class="panel panel-default">
+            <div class="panel panel-default">
 
-            <div class="panel-heading"><span class="lead">Upload New Document</span></div>
-            <div class="uploadcontainer">
-                <form method="POST" th:object="${fileBucket}" action="" enctype="multipart/form-data">
+                <div class="panel-heading" style="text-align: center"><span class="lead">Загрузка Файлов</span>
+                </div>
+                <table>
+                <div class="uploadcontainer" style="text-align: center">
+                    <form method="POST" th:object="${fileBucket}" action="" enctype="multipart/form-data">
+                        <div>
 
-                    <div>
-                        <p>Файл на загрузку</p>
-                        <input th:field="*{file}" type="file"/>
-                    </div>
-                    <div>
-                        <p>Описание</p>
-                        <input th:field="*{description}" style="width:300px;"/>
-                        <input type="submit" value="Upload">
-                    </div>
-                </form>
+                            <div class="col-md-8">
+
+                                <input th:field="*{file}" type="file"/>
+                            </div>
+                            <div class="col-md-4">
+                                <input class="btn btn-success btn-sm" type="submit" value="Загрузка">
+
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <br>
+                    </form>
+                </div>
+                </table>
             </div>
         </div>
     </div>
 
 
     <form action="#" th:action="@{/edit/save}" th:object="${indexTable}" method="post">
-        <h3 style="text-align: center">Просмотр дела</h3>
-        <table>
-            <th>Дата суда</th>
-            <td><input type="date" th:field="*{datecourt}"/></td>
-            <th>Статус</th>
-            <input type="checkbox" name="my-checkbox" checked>
-            <td><input type="text" th:field="*{status}"/></td>
-            <label for="comment">Комментарий</label>
-            <textarea class="form-control" rows="5" id="comment" th:field="*{comment}"></textarea>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="panel panel-default" style="text-align: center">
+                    <div class="panel-heading"><span class="lead">Просмотр Дела</span>
+                    </div>
+                    <table class="table table-striped">
+                        <tr>
+                            <th>ID</th>
+                            <td th:text="*{id}"></td>
+                            <th>Дата</th>
+                            <td th:text="*{#dates.format(date, 'dd-MMM-yyyy')}"></td>
+                            <th>Имя Дела</th>
+                            <td th:text="*{name}"></td>
+                            <th>ФИО клиента</th>
+                            <td th:text="*{fio}"></td>
+                        </tr>
+                    </table>
+                    <div class="row">
+                        <div class="col-md-6" style="text-align: center"><p>Статус</p>
+
+                            <input type="checkbox" checked data-toggle="toggle" th:field="*{status}"></div>
+                        <div class="col-md-6"><p>Дата суда</p>
+                            <input type="date" th:field="*{datecourt}"/></div>
+
+                    </div>
+                    <label for="comment">Комментарий</label>
+                    <textarea class="form-control" rows="5" id="comment" th:field="*{comment}"></textarea>
 
 
-        </table>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default ">
+                    <div class="panel-heading ">
+                        <span class="lead">Редактирование названия дела</span>
+                    </div>
 
-        <table class="table table-striped">
-            <tr>
-                <th>ID</th>
-                <td th:text="*{id}"></td>
-                <th>Дата</th>
-                <td th:text="*{#dates.format(date, 'dd-MMM-yyyy')}"></td>
-                <th>Имя Дела</th>
-                <td th:text="*{name}"></td>
-                <th>ФИО клиента</th>
-                <td th:text="*{fio}"></td>
-            </tr>
-        </table>
+                    <table class="table table-striped">
+                        <tr>
+                            <th>Дата начала дела</th>
+                            <td><input type="date" th:field="*{date}"/></td>
+                        </tr>
+                        <tr>
+                            <th>Имя Дела</th>
+                            <td><input type="text" th:field="*{name}"/></td>
+                        </tr>
+                        <tr>
+                            <th>ФИО Клиента</th>
+                            <td><input type="text" th:field="*{fio}"/></td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><input type="submit" class="btn btn-success btn-lg" value="Сохранить"/></td>
+                            <input type="hidden" th:field="*{id}"/>
+                        </tr>
+                    </table>
+                </div>
+            </div>
 
-
-        <h3 style="margin-top:10%;text-align: center">Редактирование дела</h3>
-
-
-        <table class="table table-striped">
-
-            <tr>
-
-                <td>Дата</td>
-                <td><input type="date" th:field="*{date}"/></td>
-            </tr>
-            <tr>
-
-                <td>Имя Дела</td>
-                <td><input type="text" th:field="*{name}"/></td>
-            </tr>
-            <tr>
-
-                <td>ФИО</td>
-                <td><input type="text" th:field="*{fio}"/></td>
-            </tr>
-            <tr>
-
-                <td>&nbsp;</td>
-                <td><input type="submit" class="btn btn-success" value="save"/></td>
-                <input type="hidden" th:field="*{id}"/>
-            </tr>
-        </table>
-
-
+        </div>
     </form>
 </div>
+
 </body>
 </html>

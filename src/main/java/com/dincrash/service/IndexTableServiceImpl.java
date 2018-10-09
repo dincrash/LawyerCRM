@@ -39,4 +39,10 @@ public class IndexTableServiceImpl implements IndexTableService {
     public void update(IndexTable indexTable) {
         this.indexTableDAO.update(indexTable);
     }
+
+
+    @Override
+    public List<IndexTable> listArchive() {
+        return this.indexTableDAO.listArchive();
+    }
 }
