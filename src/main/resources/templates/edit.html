@@ -13,8 +13,18 @@
 
 </head>
 <body>
-<th:block th:include="/menu"></th:block>
+<!--<th:block th:include="/menu"></th:block>-->
+<div xmlns:th="http://www.thymeleaf.org"
+     style="border: 2px solid #ccc;padding:10px;margin-bottom:5%;margin-top:2%;text-align: center">
+    <div th:class="row">
+        <div class="col-md-4"><a th:href="@{/}">Главная страница</a></div>
 
+        <div class="col-md-4"><a th:href="@{/ActiveClients}">Активные Дела</a></div>
+
+        <div class="col-md-4"><a th:href="@{/ArchiveClients}">Архив Дел</a></div>
+    </div>
+
+</div>
 <div class="container">
     <div class="row">
         <div class="col-sm-8">
@@ -35,7 +45,7 @@
                         <td><a class="btn btn-warning"
                                th:href="@{'/download-document/'+${user.id}+'/'+${docum.id}}">загрузка</a></td>
                         <td><a class="btn btn-danger"
-                               th:href="@{'/delete-document/'+${user.id}+'/'+${docum.id}}">удаление</a>
+                               th:href="@{'/changeid-document/'+${user.id}+'/'+${docum.id}}">в суперархив</a>
                         </td>
 
                     </tr>
@@ -44,29 +54,29 @@
         </div>
         <div class="col-sm-4">
 
+
             <div class="panel panel-default">
 
                 <div class="panel-heading" style="text-align: center"><span class="lead">Загрузка Файлов</span>
                 </div>
                 <table>
-                <div class="uploadcontainer" style="text-align: center">
-                    <form method="POST" th:object="${fileBucket}" action="" enctype="multipart/form-data">
-                        <div>
+                    <div class="uploadcontainer" style="text-align: center">
+                        <form method="POST" th:object="${fileBucket}" action="" enctype="multipart/form-data">
+                            <div style="margin-top: 5%">
 
-                            <div class="col-md-8">
+                                <div class="custom-file">
+                                    <label class="btn btn-primary">
+                                        Выбор файла <input type="file" th:field="*{file}" style="display: none;">
+                                    </label>
+                                    <input class="btn btn-success " style="margin-left: 5%" type="submit" value="Загрузка">
 
-                                <input th:field="*{file}" type="file"/>
+                                </div>
                             </div>
-                            <div class="col-md-4">
-                                <input class="btn btn-success btn-sm" type="submit" value="Загрузка">
-
-                            </div>
-                        </div>
-                        <br>
-                        <br>
-                        <br>
-                    </form>
-                </div>
+                            <br>
+                            <br>
+                            <br>
+                        </form>
+                    </div>
                 </table>
             </div>
         </div>
@@ -74,66 +84,40 @@
 
 
     <form action="#" th:action="@{/edit/save}" th:object="${indexTable}" method="post">
-        <div class="row">
-            <div class="col-md-8">
-                <div class="panel panel-default" style="text-align: center">
-                    <div class="panel-heading"><span class="lead">Просмотр Дела</span>
-                    </div>
-                    <table class="table table-striped">
-                        <tr>
-                            <th>ID</th>
-                            <td th:text="*{id}"></td>
-                            <th>Дата</th>
-                            <td th:text="*{#dates.format(date, 'dd-MMM-yyyy')}"></td>
-                            <th>Имя Дела</th>
-                            <td th:text="*{name}"></td>
-                            <th>ФИО клиента</th>
-                            <td th:text="*{fio}"></td>
-                        </tr>
-                    </table>
-                    <div class="row">
-                        <div class="col-md-6" style="text-align: center"><p>Статус</p>
+        <div class="panel panel-default" style="text-align: center">
+            <div class="panel-heading"><span class="lead">Просмотр Дела</span>
+            </div>
+            <table class="table table-striped">
+                <tr>
+                    <th>Дата начала дела</th>
+                    <td><input class="form-control form-control-lg" type="date" th:field="*{date}"/></td>
+                    <th>Имя Дела</th>
+                    <td><input class="form-control form-control-lg" type="text" th:field="*{name}"/></td>
+                    <th>ФИО клиента</th>
+                    <td><input class="form-control form-control-lg" type="text" th:field="*{fio}"/></td>
+                    <th>Дата суда</th>
+                    <td><input class="form-control form-control-lg" type="date" th:field="*{datecourt}"/></td>
+                </tr>
+            </table>
 
-                            <input type="checkbox" checked data-toggle="toggle" th:field="*{status}"></div>
-                        <div class="col-md-6"><p>Дата суда</p>
-                            <input type="date" th:field="*{datecourt}"/></div>
 
-                    </div>
-                    <label for="comment">Комментарий</label>
-                    <textarea class="form-control" rows="5" id="comment" th:field="*{comment}"></textarea>
 
+            <div class="row">
+                <div class="col-md-9">
+
+                    <textarea style="margin-left: 5%;margin-right: 1%;margin-top: 5%;margin-bottom: 5%;"
+                              class="form-control" rows="5" id="comment" th:field="*{comment}"></textarea>
+                </div>
+                <div class="col-md-3 " >
+                    <input type="submit"  class="btn btn-success btn-lg" style="margin-top: 40%" value="Сохранить"/>
+                    <input type="hidden" th:field="*{id}"/>
+                    <input type="hidden" th:field="*{status}"/>
 
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="panel panel-default ">
-                    <div class="panel-heading ">
-                        <span class="lead">Редактирование названия дела</span>
-                    </div>
-
-                    <table class="table table-striped">
-                        <tr>
-                            <th>Дата начала дела</th>
-                            <td><input type="date" th:field="*{date}"/></td>
-                        </tr>
-                        <tr>
-                            <th>Имя Дела</th>
-                            <td><input type="text" th:field="*{name}"/></td>
-                        </tr>
-                        <tr>
-                            <th>ФИО Клиента</th>
-                            <td><input type="text" th:field="*{fio}"/></td>
-                        </tr>
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td><input type="submit" class="btn btn-success btn-lg" value="Сохранить"/></td>
-                            <input type="hidden" th:field="*{id}"/>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-
         </div>
+
+
     </form>
 </div>
 

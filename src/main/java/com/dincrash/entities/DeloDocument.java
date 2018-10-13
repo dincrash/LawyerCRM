@@ -9,8 +9,6 @@ public class DeloDocument {
 
     private Integer id;
     private String name;
-    private String description;
-    private String type;
     private byte[] content;
     private IndexTable indexTable;
 

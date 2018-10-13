@@ -8,7 +8,21 @@
 
 </head>
 <body>
-<th:block th:include="/menu"></th:block>
+<!--<th:block th:include="/menu"></th:block>-->
+<div xmlns:th="http://www.thymeleaf.org"
+     style="border: 2px solid #ccc;padding:10px;margin-bottom:5%;margin-top:2%;text-align: center">
+    <div th:class="row">
+        <div class="col-md-4"> <a th:href="@{/}">Главная страница</a> </div>
+
+        <div class="col-md-4"><a th:href="@{/ActiveClients}">Активные Дела</a></div>
+
+        <div class="col-md-4"><a th:href="@{/ArchiveClients}">Архив Дел</a></div>
+    </div>
+
+</div>
+
+
+
 <h1 style="margint-top:5%;margin-bottom:10%;text-align: center;">Добро пожаловать в LawyerCRM</h1>
 <p style="text-align: center;">Здесь будут публиковаться выигранные дела</p>
 </body>

@@ -12,7 +12,19 @@
     <script src="webjars/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
 <body>
-<th:block th:include="/menu"></th:block>
+<!--<th:block th:include="/menu"></th:block>-->
+
+<div xmlns:th="http://www.thymeleaf.org"
+     style="border: 2px solid #ccc;padding:10px;margin-bottom:5%;margin-top:2%;text-align: center">
+    <div th:class="row">
+        <div class="col-md-4"><a th:href="@{/}">Главная страница</a></div>
+
+        <div class="col-md-4"><a th:href="@{/ActiveClients}">Активные Дела</a></div>
+
+        <div class="col-md-4"><a th:href="@{/ArchiveClients}">Архив Дел</a></div>
+    </div>
+
+</div>
 <div class="container" style="margin-top: 5%;margin-bottom: 10%">
 
 
@@ -20,25 +32,25 @@
     <div class="panel panel-default">
         <div class="row">
             <div class="col-md-2 ">
-                <a class="btn btn-default" style="vertical-align: center" th:href="@{/add}">Добавление дела</a>
+
+                    <a class="btn btn-default" style="margin-top: 40%;margin-left: 10%;margin-bottom: 20%" th:href="@{/add}">Добавление дела</a>
+
             </div>
 
             <div class="col-md-10">
                 <table class="table table-striped">
                     <tr>
-                        <th>ID</th>
                         <th>Дата</th>
                         <th>Имя Дела</th>
                         <th>ФИО клиента</th>
                         <th>Опции</th>
                     </tr>
                     <tr th:each="indexTable : ${indexTables}">
-                        <td th:text="${indexTable.id}"></td>
                         <td th:text="${#dates.format(indexTable.date, 'dd-MMM-yyyy')}"></td>
                         <td th:text="${indexTable.name}"></td>
                         <td th:text="${indexTable.fio}"></td>
-                        <td><a class="btn btn-warning" th:href="@{'/edit/' + ${indexTable.id}}">Просмотр/Редактирование</a>
-                            <a class="btn btn-danger" th:href="@{'/archive/' + ${indexTable.id}}">В архив</a>
+                        <td><a class="btn btn-primary" th:href="@{'/edit/' + ${indexTable.id}}">Просмотр</a>
+                            <a class="btn btn-warning" th:href="@{'/archive/' + ${indexTable.id}}">В архив</a>
                         </td>
 
                     </tr>

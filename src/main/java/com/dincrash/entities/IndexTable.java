@@ -11,7 +11,7 @@ import java.util.*;
 public class IndexTable {
     private int id;
     private Date datecourt;
-    private boolean status;
+    private int status;
     private String comment;
     private Date date;
     private String name;
@@ -83,11 +83,11 @@ public class IndexTable {
 
     @Basic
     @Column(name = "status")
-    public boolean isStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

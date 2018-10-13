@@ -12,4 +12,5 @@ public interface IndexTableService {
     public void delete (int id);
     public void update (IndexTable indexTable);
     public List<IndexTable> listArchive();
+    public List<IndexTable> listSuperArchive();
 }

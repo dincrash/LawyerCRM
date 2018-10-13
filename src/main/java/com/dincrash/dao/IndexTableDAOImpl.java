@@ -177,6 +177,32 @@ public class IndexTableDAOImpl implements IndexTableDAO {
         }
         return listArchive;
     }
+    @Override
+    public List<IndexTable> listSuperArchive() {
+        List<IndexTable> listSuperArchive = null;
+        Session session = null;
+        Transaction transaction = null;
+        int status = 2;
 
+        try {
+
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            String hql = "from IndexTable where status like concat('%',:dq,'%')";
+            Query q1 = session.createQuery(hql);
+            q1.setParameter("dq",status);
+            listSuperArchive = q1.list();
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+
+                transaction.rollback();
+
+            }
+        } finally {
+            session.close();
+        }
+        return listSuperArchive;
+    }
 
 }

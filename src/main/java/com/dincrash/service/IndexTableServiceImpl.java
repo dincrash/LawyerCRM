@@ -45,4 +45,11 @@ public class IndexTableServiceImpl implements IndexTableService {
     public List<IndexTable> listArchive() {
         return this.indexTableDAO.listArchive();
     }
+    @Override
+    public List<IndexTable> listSuperArchive() {
+        return this.indexTableDAO.listSuperArchive();
+    }
+
+
+
 }

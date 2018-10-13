@@ -63,19 +63,33 @@ public class MainController {
         return "ArchiveClients";
 
     }
+    @RequestMapping(value = {"/SuperArchive"}, method = RequestMethod.GET)
+    public String SuperArchive(ModelMap modelMap) {
+        indexTableService.listSuperArchive();
+        modelMap.put("listsuperarchives", indexTableService.listSuperArchive());
+
+
+        return "SuperArchive";
+
+    }
 
 
     @RequestMapping(value = "add", method = RequestMethod.GET)
     public String add(ModelMap modelMap) {
 
         modelMap.put("indexTable", new IndexTable());
+
         return "add";
     }
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public String add(@ModelAttribute("indexTable") IndexTable indexTable) {
-
+        indexTable.setStatus(1);
         indexTableService.create(indexTable);
+
+
+
+
         return "redirect:/ActiveClients";
     }
 
@@ -112,22 +126,27 @@ public class MainController {
         DeloDocument document = documentService.find(docId);
 
         response.setContentLength(document.getContent().length);
-        response.setHeader("Content-Disposition","attachment; filename=\"" + document.getName() +"\"");
-
+        response.setHeader("Content-Disposition","attachment; filename=\"" + java.net.URLEncoder.encode(document.getName(),"UTF-8") +"\"");
         FileCopyUtils.copy(document.getContent(), response.getOutputStream());
 
-        return "redirect:/edit/"+userId;
+        return null;
     }
 
-    @RequestMapping(value = { "/delete-document/{userId}/{docId}" }, method = RequestMethod.GET)
-    public String deleteDocument(@PathVariable int userId, @PathVariable int docId) {
-        documentService.delete(docId);
-        return "redirect:/edit/"+userId;
+
+    @RequestMapping(value = { "/changeid-document/{id}/{docId}" }, method = RequestMethod.GET)
+    public String deleteDocument(@PathVariable int id, @PathVariable int docId, DeloDocument deloDocument,IndexTable indexTable) {
+        DeloDocument dq=documentService.find(docId);
+        int dp = 9999;
+        indexTable.setId(dp);
+
+        dq.setIndexTable(indexTable);
+        documentService.update(dq);
+        return "redirect:/edit/"+id;
     }
     @RequestMapping(value = {"/archive/{id}" }, method =RequestMethod.GET)
     public String toArchive(@PathVariable int id,@ModelAttribute("indexTable") IndexTable indexTable){
         IndexTable qd = indexTableService.find(id);
-        boolean sq = false;
+        int sq = 0;
         qd.setStatus(sq);
         indexTableService.update(qd);
         return "redirect:/ActiveClients";
@@ -136,10 +155,19 @@ public class MainController {
     @RequestMapping(value = {"/active/{id}" }, method =RequestMethod.GET)
     public String toActive(@PathVariable int id,@ModelAttribute("indexTable") IndexTable indexTable){
         IndexTable qd = indexTableService.find(id);
-        boolean sq = true;
+        int sq =1;
         qd.setStatus(sq);
         indexTableService.update(qd);
-        return "redirect:/ActiveClients";
+        return "redirect:/ArchiveClients";
+    }
+
+    @RequestMapping(value = {"/superarchive/{id}" }, method =RequestMethod.GET)
+    public String toSuperArchive(@PathVariable int id,@ModelAttribute("indexTable") IndexTable indexTable){
+        IndexTable qd = indexTableService.find(id);
+        int sq = 2;
+        qd.setStatus(sq);
+        indexTableService.update(qd);
+        return "redirect:/SuperArchive";
     }
 
     @RequestMapping(value = { "/edit/{userId}" }, method = RequestMethod.POST)
@@ -173,6 +201,7 @@ public class MainController {
         document.setName(multipartFile.getOriginalFilename());
         document.setContent(multipartFile.getBytes());
         document.setIndexTable(indexTable);
+
         documentService.create(document);
     }
 
