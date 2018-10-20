@@ -1,4 +1,4 @@
-package com.dincrash.Config;
+package com.dincrash.service;
 
 import org.springframework.web.multipart.MultipartFile;
 
