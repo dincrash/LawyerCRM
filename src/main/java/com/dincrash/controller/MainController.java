@@ -2,7 +2,6 @@ package com.dincrash.controller;
 
 
 import com.dincrash.Config.FileBucket;
-import com.dincrash.Config.FileValidator;
 import com.dincrash.entities.DeloDocument;
 import com.dincrash.entities.IndexTable;
 import com.dincrash.service.DocumentService;
@@ -11,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,13 +26,9 @@ public class MainController {
     @Autowired
     private DocumentService documentService;
 
-    @Autowired
-    FileValidator fileValidator;
 
-    @InitBinder("fileBucket")
-    protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(fileValidator);
-    }
+
+
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public String Index() {
@@ -171,38 +164,27 @@ public class MainController {
     }
 
     @RequestMapping(value = { "/edit/{userId}" }, method = RequestMethod.POST)
-    public String edit(@Valid FileBucket fileBucket, BindingResult result, ModelMap model, @PathVariable int userId) throws IOException{
-        if (result.hasErrors()) {
-            System.out.println("validation errors");
-            IndexTable user = indexTableService.find(userId);
-            model.addAttribute("user", user);
-            model.addAttribute("documents", documentService.listTable());
+    public String edit(@Valid FileBucket fileBucket, ModelMap model, @PathVariable int userId) throws IOException{
 
-            return "redirect:/edit/"+userId;
-        } else {
-
-            System.out.println("Fetching file");
 
             IndexTable user = indexTableService.find(userId);
             model.addAttribute("user", user);
-
             saveDocument(fileBucket, user);
-
             return "redirect:/edit/"+userId;
-        }
+
     }
 //
     private void saveDocument(FileBucket fileBucket, IndexTable indexTable) throws IOException {
 
         DeloDocument document = new DeloDocument();
 
-        MultipartFile multipartFile = fileBucket.getFile();
-
-        document.setName(multipartFile.getOriginalFilename());
-        document.setContent(multipartFile.getBytes());
-        document.setIndexTable(indexTable);
-
-        documentService.create(document);
+        MultipartFile[] multipartFile = fileBucket.getFile();
+        for(MultipartFile multipartFile1:multipartFile) {
+            document.setName(multipartFile1.getOriginalFilename());
+            document.setContent(multipartFile1.getBytes());
+            document.setIndexTable(indexTable);
+            documentService.create(document);
+        }
     }
 
 }
