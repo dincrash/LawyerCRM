@@ -13,4 +13,5 @@ public interface DocumentDAO {
     public void delete(int id);
     public void update(DeloDocument deloDocument);
     public List<DeloDocument> findAllbyId(int docid);
+    public List<DeloDocument> findByName(String name);
 }

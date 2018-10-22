@@ -25,6 +25,11 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
+    public List<DeloDocument>  findByName(String name) {
+        return this.documentDAO.findByName(name);
+    }
+
+    @Override
     public void create(DeloDocument DeloDocument) {
         this.documentDAO.create(DeloDocument);
 

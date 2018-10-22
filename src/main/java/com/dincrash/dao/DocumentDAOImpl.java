@@ -71,6 +71,37 @@ public class DocumentDAOImpl implements DocumentDAO {
         return deloDocument;
     }
 
+
+    @Override
+    public List<DeloDocument> findByName(String name) {
+        List<DeloDocument> deloDocument = null;
+        Session session = null;
+        Transaction transaction = null;
+
+
+        try {
+            session = sessionFactory.openSession();
+            transaction = session.beginTransaction();
+            String hql = "from DeloDocument where name like concat('%',:dq,'%')";
+            Query q1 = session.createQuery(hql);
+
+
+            q1.setParameter("dq",name);
+            deloDocument = q1.list();
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+
+                transaction.rollback();
+
+            }
+        } finally {
+            session.close();
+        }
+        return deloDocument;
+    }
+
     @Override
     public void create(DeloDocument deloDocument) {
         Session session = null;

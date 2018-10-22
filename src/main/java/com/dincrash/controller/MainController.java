@@ -1,12 +1,9 @@
 package com.dincrash.controller;
 
 
-import com.dincrash.service.FileBucket;
+import com.dincrash.service.*;
 import com.dincrash.entities.DeloDocument;
 import com.dincrash.entities.IndexTable;
-import com.dincrash.service.DocumentService;
-import com.dincrash.service.IndexTableService;
-import com.dincrash.service.SaveDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.List;
 
 @Controller
 public class MainController {
@@ -37,14 +36,23 @@ public class MainController {
 
     }
 
-    @RequestMapping(value = {"/ActiveClients"}, method = RequestMethod.GET)
-    public String ActiveClients(ModelMap modelMap) {
-
+    @RequestMapping(value = {"/ActiveClients"}, method = {RequestMethod.GET,RequestMethod.POST,RequestMethod.GET})
+    public String ActiveClients(ModelMap modelMap,@ModelAttribute("mymodelobject") MyRequestDto myRequestDto) {
         modelMap.put("indexTables", indexTableService.listTable());
+        modelMap.put("mymodelobject", new MyRequestDto ());
+
+
+        String qd=myRequestDto.getMyid();
+        List<DeloDocument> dq = documentService.findByName(qd);
+
+        modelMap.put("listdocuments",dq);
 
         return "ActiveClients";
 
     }
+
+
+
 
 
     @RequestMapping(value = {"/ArchiveClients"}, method = RequestMethod.GET)
@@ -110,8 +118,8 @@ public class MainController {
     }
 
 
-    @RequestMapping(value = {"/download-document/{userId}/{docId}"}, method = RequestMethod.GET)
-    public String downloadDocument(@PathVariable int userId, @PathVariable int docId, HttpServletResponse response) throws IOException {
+    @RequestMapping(value = {"/download-document/{docId}"}, method = RequestMethod.GET)
+    public String downloadDocument( @PathVariable int docId, HttpServletResponse response) throws IOException {
         DeloDocument document = documentService.find(docId);
 
         response.setContentLength(document.getContent().length);
@@ -120,6 +128,8 @@ public class MainController {
 
         return null;
     }
+
+
 
 
     @RequestMapping(value = {"/changeid-document/{id}/{docId}"}, method = RequestMethod.GET)
@@ -169,5 +179,9 @@ public class MainController {
         return "redirect:/edit/" + userId;
 
     }
+
+
+
+
 
 }

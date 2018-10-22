@@ -9,6 +9,7 @@ public interface DocumentService {
 
     public List<DeloDocument> listTable();
     public DeloDocument find(int id);
+    public List<DeloDocument> findByName(String name);
     public void create(DeloDocument deloDocument);
     public void delete(int id);
     public void update(DeloDocument deloDocument);
