@@ -28,7 +28,6 @@ public class MainController {
     private SaveDocument saveDocument;
 
 
-
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public String Index() {
 
@@ -36,23 +35,20 @@ public class MainController {
 
     }
 
-    @RequestMapping(value = {"/ActiveClients"}, method = {RequestMethod.GET,RequestMethod.POST,RequestMethod.GET})
-    public String ActiveClients(ModelMap modelMap,@ModelAttribute("mymodelobject") MyRequestDto myRequestDto) {
-        modelMap.put("indexTables", indexTableService.listTable());
-        modelMap.put("mymodelobject", new MyRequestDto ());
-
-
-        String qd=myRequestDto.getMyid();
+    @RequestMapping(value = {"/ActiveClients"}, method = {RequestMethod.GET, RequestMethod.POST})
+    public String ActiveClients(ModelMap modelMap, @ModelAttribute("mymodelobject") MyRequestDto myRequestDto) {
+        modelMap.put("mymodelobject", new MyRequestDto());
+        String qd = myRequestDto.getMyid();
         List<DeloDocument> dq = documentService.findByName(qd);
 
-        modelMap.put("listdocuments",dq);
+        modelMap.put("listdocuments", dq);
 
+
+        modelMap.put("indexTables", indexTableService.listTable());
         return "ActiveClients";
 
+
     }
-
-
-
 
 
     @RequestMapping(value = {"/ArchiveClients"}, method = RequestMethod.GET)
@@ -119,7 +115,7 @@ public class MainController {
 
 
     @RequestMapping(value = {"/download-document/{docId}"}, method = RequestMethod.GET)
-    public String downloadDocument( @PathVariable int docId, HttpServletResponse response) throws IOException {
+    public String downloadDocument(@PathVariable int docId, HttpServletResponse response) throws IOException {
         DeloDocument document = documentService.find(docId);
 
         response.setContentLength(document.getContent().length);
@@ -128,8 +124,6 @@ public class MainController {
 
         return null;
     }
-
-
 
 
     @RequestMapping(value = {"/changeid-document/{id}/{docId}"}, method = RequestMethod.GET)
@@ -175,13 +169,10 @@ public class MainController {
 
         IndexTable user = indexTableService.find(userId);
         model.addAttribute("user", user);
-        saveDocument.saveDocument(fileBucket,user);
+        saveDocument.saveDocument(fileBucket, user);
         return "redirect:/edit/" + userId;
 
     }
-
-
-
 
 
 }

@@ -3,25 +3,24 @@
 <head>
     <title>Активные Дела</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <script th:src="@{/webjars/jquery/3.2.1/jquery.min.js}" type="text/javascript"></script>
+    <script th:src="@{/webjars/popper.js/1.14.3/umd/popper.min.js}" type="text/javascript"></script>
 
-
-    <link th:href="@{webjars/bootstrap/3.2.0/css/bootstrap.min.css}"
+    <link th:href="@{webjars/bootstrap/4.1.3/css/bootstrap.min.css}"
           rel="stylesheet">
+    <script th:src="@{/webjars/bootstrap/4.1.3/js/bootstrap.min.js}" type="text/javascript"></script>
 
-
-    <script src="webjars/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>
 <body>
-<!--<th:block th:include="/menu"></th:block>-->
 
 <div xmlns:th="http://www.thymeleaf.org"
      style="border: 2px solid #ccc;padding:10px;margin-bottom:5%;margin-top:2%;text-align: center">
     <div th:class="row">
-        <div class="col-md-4"><a th:href="@{/}">Главная страница</a></div>
+        <div class="col-md-3"><a th:href="@{/}">Главная страница</a></div>
+        <div class="col-md-3"><a th:href="@{/add}">Добавление дела</a></div>
+        <div class="col-md-3"><a th:href="@{/ActiveClients}">Активные Дела</a></div>
 
-        <div class="col-md-4"><a th:href="@{/ActiveClients}">Активные Дела</a></div>
-
-        <div class="col-md-4"><a th:href="@{/ArchiveClients}">Архив Дел</a></div>
+        <div class="col-md-3"><a th:href="@{/ArchiveClients}">Архив Дел</a></div>
     </div>
 
 </div>
@@ -30,65 +29,103 @@
 
     <h1 style="margin-bottom:10%;text-align: center;">Активные дела</h1>
     <div class="panel panel-default">
-        <div class="row">
-            <div class="col-md-2">
+         <script type="javascript">
 
-                <a class="btn btn-default" style="margin-top: 40%;margin-left: 10%;margin-bottom: 20%"
-                   th:href="@{/add}">Добавление дела</a>
-            </div>
+            // var tableList = [[${listdocuments.isEmpty()}]];
+            // if (tableList) {
+            var element = document.getElementById("collapseOne");
+            element.classList.remove("show");
+            // }
+
+            // else {
+            var prod = document.getElementById("collapseTwo");
+            prod.classList.add("show");
+            // }
 
 
-            <div class="col-md-10 ">
-                <table class="table table-striped">
-                    <tr>
-                        <th>Дата</th>
-                        <th>Имя Дела</th>
-                        <th>ФИО клиента</th>
-                        <th>Опции</th>
-                    </tr>
-                    <tr th:each="indexTable : ${indexTables}">
-                        <td th:text="${#dates.format(indexTable.date, 'dd-MMM-yyyy')}"></td>
-                        <td th:text="${indexTable.name}"></td>
-                        <td th:text="${indexTable.fio}"></td>
-                        <td><a class="btn btn-primary" th:href="@{'/edit/' + ${indexTable.id}}">Просмотр</a>
-                            <a class="btn btn-warning" th:href="@{'/archive/' + ${indexTable.id}}">В архив</a>
-                        </td>
+        </script>
 
-                    </tr>
-                </table>
-            </div>
-        </div>
-    </div>
-    <div class="row" style="margin-top: 5%">
-        <div class="col-md-8 panel panel-default">
-            <div class="row">
-                <div class="col-md-4" style="margin-top: 5%;margin-bottom: 5%">
-                    <form th:action="@{/ActiveClients}" th:object="${mymodelobject}" method="post">
-                        <p>Поиск файлов</p>
-                        <input name="myid" type="text" th:value="*{myid}">
-                        <input type="submit" class="btn btn-success" style="margin-top: 3% " value="Submit"/>
-
-                    </form>
+        <div class="accordion" id="accordionExample">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse"
+                                data-target="#collapseOne"
+                                aria-expanded="true" aria-controls="collapseOne">
+                            Отоборажения дела
+                        </button>
+                    </h5>
                 </div>
-                <div class="col-md-8 ">
-                    <table class="table table-striped">
-                        <tr>
-                            <th>Имя</th>
-                            <th>Опции</th>
-                            <th></th>
-                        </tr>
-                        <tr th:each="docum : ${listdocuments}">
-                            <td th:text="${docum.name}"></td>
-                            <td><a class="btn btn-warning"
-                                   th:href="@{'/download-document/'+${docum.id}}">загрузка</a></td>
-                        </tr>
-                    </table>
+
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                     data-parent="#accordionExample">
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <tr>
+                                <th>Дата</th>
+                                <th>Имя Дела</th>
+                                <th>ФИО клиента</th>
+                                <th>Опции</th>
+                            </tr>
+                            <tr th:each="indexTable : ${indexTables}">
+                                <td th:text="${#dates.format(indexTable.date, 'dd-MMM-yyyy')}"></td>
+                                <td th:text="${indexTable.name}"></td>
+                                <td th:text="${indexTable.fio}"></td>
+                                <td><a class="btn btn-primary" th:href="@{'/edit/' + ${indexTable.id}}">Просмотр</a>
+                                    <a class="btn btn-warning" th:href="@{'/archive/' + ${indexTable.id}}">В архив</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
+            <div class="card">
+                <div class="card-header" id="headingTwo">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Поиск файлов
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseTwo" class="collapse" th:classappend="${listdocuments.isEmpty()} ? adminclass : show"
+                     aria-labelledby="headingTwo" data-parent="#accordionExample">
+                    <div class="card-body">
+                        <div class="row" style="margin-top: 5%">
+
+                            <div class="col-md-4" style="margin-top: 5%;margin-bottom: 5%">
+                                <form th:action="@{/ActiveClients}" th:object="${mymodelobject}" method="post">
+                                    <input name="myid" type="text" th:value="*{myid}">
+                                    <input type="submit" class="btn btn-success" style="margin-top: 3% "
+                                           value="Submit"/>
+                                </form>
+                            </div>
+                            <div class="col-md-8">
+                                <table class="table table-striped" th:if="${!listdocuments.isEmpty()}">
+                                    <tr>
+                                        <th>Имя</th>
+                                        <th>Опции</th>
+                                        <th></th>
+                                    </tr>
+                                    <tr th:each="docum : ${listdocuments}">
+                                        <td th:text="${docum.name}"></td>
+                                        <td><a class="btn btn-warning"
+                                               th:href="@{'/download-document/'+${docum.id}}">загрузка</a></td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
+</div>
+
 
 </div>
+
 </body>
 </html>
