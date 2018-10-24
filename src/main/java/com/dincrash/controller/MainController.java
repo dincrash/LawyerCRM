@@ -9,12 +9,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
+import sun.util.calendar.Gregorian;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.lang.reflect.Array;
-import java.util.List;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Controller
 public class MainController {
@@ -38,10 +43,10 @@ public class MainController {
     @RequestMapping(value = {"/ActiveClients"}, method = {RequestMethod.GET, RequestMethod.POST})
     public String ActiveClients(ModelMap modelMap, @ModelAttribute("mymodelobject") MyRequestDto myRequestDto) {
         modelMap.put("mymodelobject", new MyRequestDto());
-        String qd = myRequestDto.getMyid();
-        List<DeloDocument> dq = documentService.findByName(qd);
+        String name = myRequestDto.getMyid();
+        List<DeloDocument> listDocuments = documentService.findByName(name);
 
-        modelMap.put("listdocuments", dq);
+        modelMap.put("listdocuments", listDocuments);
 
 
         modelMap.put("indexTables", indexTableService.listTable());
@@ -107,9 +112,8 @@ public class MainController {
 
 
     @RequestMapping(value = "edit/save", method = RequestMethod.POST)
-    public String edit(@ModelAttribute("indexTable") IndexTable indexTable) {
+    public String edit(@ModelAttribute("indexTable") IndexTable indexTable) throws ParseException {
         indexTableService.update(indexTable);
-
         return "redirect:/ActiveClients";
     }
 

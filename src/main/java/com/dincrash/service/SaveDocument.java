@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Date;
 
 @Repository("SaveDocument")
 public class SaveDocument{
@@ -21,6 +22,7 @@ public class SaveDocument{
         for (MultipartFile multipartFile1 : multipartFile) {
             document.setName(multipartFile1.getOriginalFilename());
             document.setContent(multipartFile1.getBytes());
+            document.setDateload(new Date());
             document.setIndexTable(indexTable);
             documentService.create(document);
         }

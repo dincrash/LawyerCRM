@@ -30,12 +30,15 @@
                 <table class="table table-striped">
                     <tr>
                         <th>Имя</th>
+                        <th>Датазагрузки</th>
                         <th>Опции</th>
                         <th></th>
                     </tr>
                     <tr th:each="docum : ${documents}">
                         <td th:text="${docum.name}"></td>
-                        <td><a class="btn btn-warning"
+                        <td th:text="${docum.dateload}"></td>
+
+                        <td><a class="btn btn-info"
                                th:href="@{'/download-document/'+${docum.id}}">загрузка</a></td>
                         <td><a class="btn btn-danger"
                                th:href="@{'/changeid-document/'+${user.id}+'/'+${docum.id}}">в суперархив</a>

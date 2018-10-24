@@ -1,6 +1,9 @@
 package com.dincrash.entities;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "delodocument")
@@ -11,6 +14,7 @@ public class DeloDocument {
     private String name;
     private byte[] content;
     private IndexTable indexTable;
+    private Date dateload;
 
 
 
@@ -44,7 +48,15 @@ public class DeloDocument {
     }
 
 
+    @Basic
+    @Column(name = "dateload")
+    public Date getDateload() {
+        return dateload;
+    }
 
+    public void setDateload(Date dateload) {
+        this.dateload = dateload;
+    }
 
     @Lob
     @Basic(fetch = FetchType.LAZY)
