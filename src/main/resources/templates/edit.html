@@ -13,85 +13,96 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" th:href="@{/}">LawyerCRM</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link"th:href="@{/add}">Добавление дела</a>
+                <a class="nav-link" th:href="@{/add}">Добавление дела</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link"th:href="@{/ActiveClients}">Активные Дела</a>
+                <a class="nav-link" th:href="@{/ActiveClients}">Активные Дела</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link"th:href="@{/ArchiveClients}">Архив Дел</a>
+                <a class="nav-link" th:href="@{/ArchiveClients}">Архив Дел</a>
             </li>
         </ul>
     </div>
 </nav>
 <div class="container">
-    <div class="row">
+    <div class="row" style="margin-top: 10%">
         <div class="col-sm-8">
-            <div class="panel panel-default">
-                <div class="panel-heading" style="text-align: center"><h2>Прикрепленные файлы</h2>>
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title " style="text-align: center">Прикрепленные файлы</div>
+                    <div class="card-text">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>Имя</th>
+                                <th>Датазагрузки</th>
+                                <th>Опции</th>
+                                <th></th>
+                            </tr>
+                            <tr th:each="docum : ${documents}">
+                                <td th:text="${docum.name}"></td>
+                                <td th:text="${docum.dateload}"></td>
+
+                                <td><a class="btn btn-info"
+                                       th:href="@{'/download-document/'+${docum.id}}">загрузка</a></td>
+                                <td><a class="btn btn-danger"
+                                       th:href="@{'/changeid-document/'+${user.id}+'/'+${docum.id}}">в суперархив</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
-
-                <table class="table table-striped">
-                    <tr>
-                        <th>Имя</th>
-                        <th>Датазагрузки</th>
-                        <th>Опции</th>
-                        <th></th>
-                    </tr>
-                    <tr th:each="docum : ${documents}">
-                        <td th:text="${docum.name}"></td>
-                        <td th:text="${docum.dateload}"></td>
-
-                        <td><a class="btn btn-info"
-                               th:href="@{'/download-document/'+${docum.id}}">загрузка</a></td>
-                        <td><a class="btn btn-danger"
-                               th:href="@{'/changeid-document/'+${user.id}+'/'+${docum.id}}">в суперархив</a>
-                        </td>
-                    </tr>
-                </table>
             </div>
         </div>
         <div class="col-sm-4">
-            <div class="panel panel-default">
-                <div class="panel-heading" style="text-align: center"><span class="lead">Загрузка Файлов</span>
-                </div>
-                <table>
-                    <div class="uploadcontainer" style="text-align: center">
-                        <form method="POST" th:object="${fileBucket}" action="" enctype="multipart/form-data">
-                            <div style="margin-top: 5%;margin-bottom: 5%">
-                                <div class="custom-file">
-                                    <label class="btn btn-primary">
-                                        Выбор файлов<input type="file"  multiple="" th:field="*{file}" style="display: none;">
-                                    </label>
-                                    <input class="btn btn-success " style="margin-left: 5%;margin-bottom: 2%" type="submit"
-                                           value="Загрузка">
-                                </div>
-                            </div>
-                        </form>
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title" style="text-align: center">Загрузка Файлов
                     </div>
-                </table>
+                    <div class="card-text">
+                        <table>
+                            <div class="uploadcontainer" style="text-align: center">
+                                <form method="POST" th:object="${fileBucket}" action="" enctype="multipart/form-data">
+                                    <div style="margin-top: 5%;margin-bottom: 5%">
+                                        <div class="custom-file">
+                                            <label class="btn btn-primary">
+                                                Выбор файлов<input type="file" multiple="" th:field="*{file}"
+                                                                   style="display: none;">
+                                            </label>
+                                            <input class="btn btn-success " style="margin-left: 5%;margin-bottom: 2%"
+                                                   type="submit"
+                                                   value="Загрузка">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <form action="#" th:action="@{/edit/save}" th:object="${indexTable}" method="post">
-        <div class="panel panel-default" style="text-align: center">
-            <div class="panel-heading"><span class="lead">Просмотр Дела</span>
+
+    <form action="#" th:action="@{/edit/save}" style="margin-top: 5%" th:object="${indexTable}" method="post">
+        <div class="card" style="text-align: center">
+            <div class="card-body">
+            <div class="card-title">Просмотр Дела
             </div>
-            <table class="table table-striped">
+            <table class="table table-bordered">
                 <tr>
                     <th>Дата начала дела</th>
                     <td><input class="form-control form-control-sm" type="date" th:field="*{date}"/></td>
                     <th>Имя Дела</th>
                     <td><input class="form-control form-control-sm" type="text" th:field="*{name}"/></td>
                     <th>ФИО клиента</th>
-                    <td><input class="form-control form-control-sm"  type="text" th:field="*{fio} "/></td>
+                    <td><input class="form-control form-control-sm" type="text" th:field="*{fio} "/></td>
                 </tr>
                 <tr>
                     <th>Дата суда</th>
@@ -113,6 +124,7 @@
                     <input type="hidden" th:field="*{status}"/>
 
                 </div>
+            </div>
             </div>
         </div>
     </form>

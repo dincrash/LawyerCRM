@@ -10,56 +10,59 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" th:href="@{/}">LawyerCRM</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link"th:href="@{/add}">Добавление дела</a>
+                <a class="nav-link" th:href="@{/add}">Добавление дела</a>
             </li>
             <li class="nav-item ">
-                <a class="nav-link"th:href="@{/ActiveClients}">Активные Дела</a>
+                <a class="nav-link" th:href="@{/ActiveClients}">Активные Дела</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link"th:href="@{/ArchiveClients}">Архив Дел</a>
+                <a class="nav-link" th:href="@{/ArchiveClients}">Архив Дел</a>
             </li>
         </ul>
     </div>
 </nav>
 <div class="container">
-    <h3>Добавление нового дела</h3>
+    <div class="card w-50" style="margin-top: 10%">
+        <div class="card-body">
+            <div class="card-title" style="text-align: center">
+                Добавление нового дела
+            </div>
+            <div>
+                <form action="#" th:action="@{/add}" th:object="${indexTable}" method="post">
+                    <table class="table">
+                        <tr>
+                            <td>Дата</td>
+                            <td><input type="date" th:field="*{date}"/></td>
+                        </tr>
+                        <tr>
+                            <td>Имя Дела</td>
+                            <td><input type="text" th:field="*{name}"/></td>
+                        </tr>
+                        <tr>
 
-    <form action="#" th:action="@{/add}" th:object="${indexTable}" method="post">
+                            <td>ФИО</td>
+                            <td><input type="text" th:field="*{fio}"/></td>
+                        </tr>
+                        <tr>
+
+                            <td>&nbsp;</td>
+                            <td><input type="submit" class="btn btn-success" value="Добавить"/></td>
+                        </tr>
+                    </table>
 
 
-        <table class="table table-striped">
+                </form>
+            </div>
+        </div>
+    </div>
 
-            <tr>
-
-                <td>Дата</td>
-                <td><input type="date" th:field="*{date}"/></td>
-            </tr>
-            <tr>
-
-                <td>Имя Дела</td>
-                <td><input type="text" th:field="*{name}"/></td>
-            </tr>
-            <tr>
-
-                <td>ФИО</td>
-                <td><input type="text" th:field="*{fio}"/></td>
-            </tr>
-            <tr>
-
-                <td>&nbsp;</td>
-                <td><input type="submit" class="btn btn-success" value="Добавить"/></td>
-            </tr>
-        </table>
-
-
-    </form>
 </div>
 </body>
 </html>
