@@ -13,18 +13,29 @@
 <body>
 <!--<th:block th:include="/menu"></th:block>-->
 
-<div xmlns:th="http://www.thymeleaf.org"
-     style="border: 2px solid #ccc;padding:10px;margin-bottom:5%;margin-top:2%;text-align: center">
-    <div th:class="row">
-        <div class="col-md-3"> <a th:href="@{/}">Главная страница</a> </div>
-        <div class="col-md-3"><a th:href="@{/add}">Добавление дела</a></div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" th:href="@{/}">LawyerCRM</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-        <div class="col-md-3"><a th:href="@{/ActiveClients}">Активные Дела</a></div>
-
-        <div class="col-md-3"><a th:href="@{/SuperArchive}">СуперАрхив</a></div>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link"th:href="@{/add}">Добавление дела</a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link"th:href="@{/ActiveClients}">Активные Дела</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link"th:href="@{/ArchiveClients}">Архив Дел</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"th:href="@{/SuperArchive}">СуперАрхив</a>
+            </li>
+        </ul>
     </div>
-
-</div>
+</nav>
 <div class="container" style="margin-top: 5%;margin-bottom: 10%">
 
 
