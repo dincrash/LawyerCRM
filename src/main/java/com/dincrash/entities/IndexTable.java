@@ -19,6 +19,7 @@ public class IndexTable {
     private Set<DeloDocument> deloDocument=new HashSet<DeloDocument>();
     private long telephone1;
     private long telephone2;
+    private String time;
 
     @OneToMany(mappedBy = "indexTable", cascade = CascadeType.ALL)
     public Set<DeloDocument> getDeloDocument() {
@@ -118,8 +119,17 @@ public class IndexTable {
     public long getTelephone2() {
         return telephone2;
     }
-
     public void setTelephone2(long telephone2) {
         this.telephone2 = telephone2;
+    }
+
+    @Basic
+    @Column(name ="time")
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

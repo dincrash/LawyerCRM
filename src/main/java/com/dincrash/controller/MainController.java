@@ -1,28 +1,29 @@
 package com.dincrash.controller;
 
 
-import com.dincrash.service.*;
 import com.dincrash.entities.DeloDocument;
 import com.dincrash.entities.IndexTable;
+import com.dincrash.service.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.bind.annotation.*;
-import sun.util.calendar.Gregorian;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
 
 @Controller
 public class MainController {
+    private final static Logger lobe = LogManager.getLogger(MainController.class);
 
     @Autowired
     private IndexTableService indexTableService;
@@ -32,13 +33,19 @@ public class MainController {
     @Autowired
     private SaveDocument saveDocument;
 
-
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public String Index() {
+        lobe.debug("dqwq");
+        lobe.info("This is an info message");
+        lobe.warn("This is a warn message");
+        lobe.error("This is an error message");
+        lobe.fatal("This is a fatal message");
+
 
         return "index";
 
     }
+
 
     @RequestMapping(value = {"/ActiveClients"}, method = {RequestMethod.GET, RequestMethod.POST})
     public String ActiveClients(ModelMap modelMap, @ModelAttribute("mymodelobject") MyRequestDto myRequestDto) {
@@ -81,8 +88,8 @@ public class MainController {
     public String add(ModelMap modelMap) {
 
         modelMap.put("indexTable", new IndexTable());
-
         return "add";
+
     }
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
