@@ -4,8 +4,6 @@ package com.dincrash.controller;
 import com.dincrash.entities.DeloDocument;
 import com.dincrash.entities.IndexTable;
 import com.dincrash.service.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,7 +21,6 @@ import java.util.List;
 
 @Controller
 public class MainController {
-    private final static Logger lobe = LogManager.getLogger(MainController.class);
 
     @Autowired
     private IndexTableService indexTableService;
@@ -35,11 +32,6 @@ public class MainController {
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public String Index() {
-        lobe.debug("dqwq");
-        lobe.info("This is an info message");
-        lobe.warn("This is a warn message");
-        lobe.error("This is an error message");
-        lobe.fatal("This is a fatal message");
 
 
         return "index";
@@ -86,10 +78,8 @@ public class MainController {
 
     @RequestMapping(value = "add", method = RequestMethod.GET)
     public String add(ModelMap modelMap) {
-
-        modelMap.put("indexTable", new IndexTable());
+//        modelMap.put("indexTable", new IndexTable());
         return "add";
-
     }
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
